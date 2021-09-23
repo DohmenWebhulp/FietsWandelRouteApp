@@ -25,10 +25,13 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import Navigator from './app/stacks/appStack.js';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import Coordinaten from '../views/Coordinaten';
+
 import { Provider } from "react-redux";
 import API from "./app/lib/API.js";
 import * as stylist from "./app/resources/styles/Styles.js";
-import Coordinaten from './app/views/Coordinaten.js';
 
 import ReduxFoot from "./app/components/ReduxFoot";
 import ReduxHead from "./app/components/ReduxHead";
