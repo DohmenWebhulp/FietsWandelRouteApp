@@ -100,7 +100,7 @@ export default class App extends Component {
           return(
             <NavigationContainer style={stylist.styling}>
                     <Stack.Navigator screenOptions={{headerShown: false}}>
-                        <Stack.Screen name="Homepage" component={ Homepage }/>   
+                        <Stack.Screen name="Homepage" component={ Homepage } navigation={this.props.navigation}/>   
                         <Stack.Screen name="Coordinaten" component={ Coordinaten}/>        
                     </Stack.Navigator>
                 </NavigationContainer>

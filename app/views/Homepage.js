@@ -56,7 +56,7 @@ class Homepage extends Component {
                       </Text>
                       <Text>{item.Omschrijving}</Text>
                       <Button title="Coordinaten" 
-                        onPress={() => navigation.push("Coordinaten")}/>
+                        onPress={this.props.navigation.navigate("Coordinaten").bind(this)}/>
                   </View>
                 ))}
                 </View>
