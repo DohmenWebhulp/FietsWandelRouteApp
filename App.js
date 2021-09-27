@@ -42,29 +42,15 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoaded: false,
+      isLoaded: true,
       data: []           	 
     }
     
   }
 
   componentDidMount() {
-     this.fetchData(); 
      this.postData();
      //alert(this.state.isLoaded);  
-  }
-
-  fetchData() {
-    let url1 = "https://cockpit.educom.nu/api/collections/get/Fietsroute?token=9d13205f131c93ba9b696c5761a0d5";
-    //let url2 = "https://cockpit.educom.nu/api/collections/get/Coordinaten?token=9d13205f131c93ba9b696c5761a0d5";
-    //let url3 = "https://cockpit.educom.nu/api/collections/get/Gebruiker?token=9d13205f131c93ba9b696c5761a0d5";
-    API.fetchData(url1)
-    .then( result => {
-        this.setState({
-            isLoaded: true,
-            data: result
-          });
-    })
   }
 
   postData(){
@@ -85,12 +71,10 @@ export default class App extends Component {
 
    render() {
      return(
-      <Provider store={ store }>
          <View style={{ flex: 1, flexDirection: "column", padding: 
                20, justifyContent: "center" }}>
                  {this.renderContent()}
-                 </View>
-       </Provider>
+         </View>
      )
    }
     renderContent(){
@@ -106,7 +90,7 @@ export default class App extends Component {
                 </NavigationContainer>
         )
       }else{
-        return(<View><Text>Applyddd a real spinner here</Text></View>)
+        return(<View><Text>Apply a real spinner here</Text></View>)
       }
     }
 }

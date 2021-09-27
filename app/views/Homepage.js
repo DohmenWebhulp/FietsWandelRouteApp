@@ -1,6 +1,7 @@
 import React, { Component} from 'react';
 import { View, Text, SafeAreaView, Button } from 'react-native';
 import * as stylist from '../resources/styles/Styles';
+import API from '../lib/API.js';
 
 class Homepage extends Component {
 
@@ -14,11 +15,21 @@ class Homepage extends Component {
     }
 
     componentDidMount() {
-        this.setState({
-            isLoaded: true
-        })
+        this.fetchData(); 
     }
 
+    fetchData() {
+        let url1 = "https://cockpit.educom.nu/api/collections/get/Fietsroute?token=9d13205f131c93ba9b696c5761a0d5";
+        //let url2 = "https://cockpit.educom.nu/api/collections/get/Coordinaten?token=9d13205f131c93ba9b696c5761a0d5";
+        //let url3 = "https://cockpit.educom.nu/api/collections/get/Gebruiker?token=9d13205f131c93ba9b696c5761a0d5";
+        API.fetchData(url1)
+        .then( result => {
+            this.setState({
+                isLoaded: true,
+                data: result
+            });
+        })
+    }
 
     renderContent() {
         var datas=[
@@ -56,7 +67,7 @@ class Homepage extends Component {
                         </Text>
                         <Text>{item.Omschrijving}</Text>
                         <Button title="Coordinaten" 
-                            onPress={this.props.navigation.navigate("Coordinaten")}/>
+                            onPress={() => this.props.navigation.navigate('Coordinaten')}/>
                     </View>
                 ))}
                 </View>
