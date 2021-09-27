@@ -20,7 +20,7 @@ class Homepage extends Component {
     }
 
 
-    renderContent({ navigation}) {
+    renderContent() {
         var datas=[
             {
                 routeNaam: "Rondje Sittard",
@@ -49,15 +49,15 @@ class Homepage extends Component {
             return(
                 <View>
                 {datas.map(item => ( 
-                  <View key={item._id} style={stylist.styling}>
-                      <Text>
-                        <Text style={stylist.textstyle}>{item.routeNaam}</Text> 
-                        <Text style={stylist.textstyle}>{item.Afstand}</Text>
-                      </Text>
-                      <Text>{item.Omschrijving}</Text>
-                      <Button title="Coordinaten" 
-                        onPress={this.props.navigation.navigate("Coordinaten").bind(this)}/>
-                  </View>
+                    <View key={item._id} style={stylist.styling}>
+                        <Text>
+                            <Text style={stylist.textstyle}>{item.routeNaam}</Text> 
+                            <Text style={stylist.textstyle}>{item.Afstand}</Text>
+                        </Text>
+                        <Text>{item.Omschrijving}</Text>
+                        <Button title="Coordinaten" 
+                            onPress={this.props.navigation.navigate("Coordinaten")}/>
+                    </View>
                 ))}
                 </View>
             )
