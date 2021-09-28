@@ -31,7 +31,7 @@ class Coordinaten extends Component {
     }
 
     renderContent() {
-        var datas = this.state.data.filter((item) => item.Route_id == 1);
+        var datas = this.state.data.filter((item) => item.Route_id == this.props.item._id);
         console.warn(this.props.item)
         if(this.state.isLoaded) {
             return(
