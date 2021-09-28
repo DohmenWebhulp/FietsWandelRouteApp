@@ -1,6 +1,6 @@
 import React, { Component} from 'react';
-import { View, Text, SafeAreaView, Button, FlatList } from 'react-native';
-import * as Styles from '../resources/styles/Styles';
+import { View, Text, SafeAreaView, Button, FlatList, ScrollView } from 'react-native';
+import * as stylist from '../resources/styles/Styles';
 import API from '../lib/API.js';
 class Coordinaten extends Component {
 
@@ -9,7 +9,8 @@ class Coordinaten extends Component {
         this.state = {
             isLoaded: false,  
             isError: false,   
-            data: []
+            data: [],
+            route: this.props.route.params.item
         }
     }
 
@@ -22,41 +23,48 @@ class Coordinaten extends Component {
         //let url3 = "https://cockpit.educom.nu/api/collections/get/Gebruiker?token=9d13205f131c93ba9b696c5761a0d5";
         API.fetchData(url2)
         .then( result => {
-            //console.warn(result);
+            //console.warn(this.state.route);
             this.setState({
                 isLoaded: true,
-                data: result.data
+                data: result.data,
+                route: this.props.route.params.item
             });
         })
     }
     renderAnItem(item){
         return(
-            <View key={item._id} style={stylist.styling}>
-                <Text>
-                    <Text style={stylist.textstyle}>{item.Plaatsnaam}</Text> 
-                    <Text style={stylist.textstyle}>{item.Straatnaam}</Text>
-                </Text>
-                <Button title="Homepage" onPress={() => this.props.navigation.goBack()}></Button>
+            <View key={item.item._id} style={stylist.styling}>
+                <Text style={stylist.textstyle}>{item.item.Plaatsnaam}</Text> 
+                <Text style={stylist.textstyle}>{item.item.Straatnaam}</Text>
             </View>
         )
     }
     renderContent() {
-        var datas = this.state.data.filter((item) => item.Route_id == this.props.item._id);
-        console.warn(this.props.item)
+        var datas = this.state.data.filter((item) => item.Route_id == this.state.route._id);
         if(this.state.isLoaded) {
             return(
-                <FlatList data={datas}
-                renderItem={(item) => this.renderAnItem(item)}
-                keyExtractor={ item => item._id.toString()}/>
-                    
+                <ScrollView>
+                    <Button title="Homepage" onPress={() => this.props.navigation.goBack()}></Button>
+                    <FlatList data={datas}
+                    renderItem={(item) => this.renderAnItem(item)}
+                    keyExtractor={ item => item._id.toString()}/>
+                </ScrollView>
             )
         }
       
     }
 
+    calculateDistance(stop1, stop2){
+        var deltaL = Math.abs(stop1.Lengtegraad - stop2.Lengtegraad)*(Math.PI/180);
+        var deltaB = Math.abs(stop1.Breedtegraad - stop2.Breedtegraad)*(Math.PI/180);
+        var radiusB = 6371;
+        var radiusL = Math.sin(stop1.Breedtegraad)*radiusB;
+        var dist = Math.sqrt(Math.pow(deltaL*radiusL, 2)+Math.pow(deltaB*radiusB, 2));
+    }
+
     render() {
         return(
-            <View style={Styles.styling}>
+            <View style={stylist.styling}>
                 { this.renderContent() }
             </View>
         )

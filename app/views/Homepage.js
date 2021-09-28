@@ -24,7 +24,7 @@ class Homepage extends Component {
         //let url3 = "https://cockpit.educom.nu/api/collections/get/Gebruiker?token=9d13205f131c93ba9b696c5761a0d5";
         API.fetchData(url1)
         .then( result => {
-            console.warn(result);
+            //console.warn(result);
             this.setState({
                 isLoaded: true,
                 data: result.data
