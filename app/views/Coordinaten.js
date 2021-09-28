@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
-import { View, Text, SafeAreaView, Button } from 'react-native';
+import { View, Text, SafeAreaView, Button, FlatList } from 'react-native';
 import * as Styles from '../resources/styles/Styles';
-
+import API from '../lib/API.js';
 class Coordinaten extends Component {
 
     constructor(props) {
@@ -9,7 +9,7 @@ class Coordinaten extends Component {
         this.state = {
             isLoaded: false,  
             isError: false,   
-            data: this.props.data
+            data: []
         }
     }
 
@@ -22,15 +22,47 @@ class Coordinaten extends Component {
         //let url3 = "https://cockpit.educom.nu/api/collections/get/Gebruiker?token=9d13205f131c93ba9b696c5761a0d5";
         API.fetchData(url2)
         .then( result => {
+            //console.warn(result);
             this.setState({
                 isLoaded: true,
-                data: result
+                data: result.data
             });
         })
     }
 
     renderContent() {
-        var datas=[
+        var datas = this.state.data.filter((item) => item.Route_id == 1);
+        console.warn(this.props.item)
+        if(this.state.isLoaded) {
+            return(
+                <FlatList data={datas}
+                renderItem={({item}) =>
+                    (<View key={item._id} style={stylist.styling}>
+                        <Text>
+                            <Text style={stylist.textstyle}>{item.Plaatsnaam}</Text> 
+                            <Text style={stylist.textstyle}>{item.Straatnaam}</Text>
+                        </Text>
+                        <Button title="Homepage" onPress={() => this.props.navigation.goBack()}></Button>
+                    </View>)}
+                />
+            )
+        }
+      
+    }
+
+    render() {
+        return(
+            <View style={Styles.styling}>
+                { this.renderContent() }
+            </View>
+        )
+    }
+
+}
+
+export {Coordinaten};
+
+/*        var datas=[
             {
                 "Plaatsnaam": "Sittard",
                 "Straatnaam": "Rijksweg Noord",
@@ -196,33 +228,7 @@ class Coordinaten extends Component {
                 "Straatnaam": "Tunnelstraat",
                 "Lengtegraad": "51.0059128",
                 "Breedtegraad": "5.8577505",
-                "Route_id": "2",
+                "Route_id": 2,
                 "_id": "894551426666310310000061"
             }
-        ],
-        // Hoe routeData vanuit Homepage over te hevelen?
-        if(this.state.isLoaded) {
-            return(
-                <View>
-                    {datas.filter((item) => item.Route_id == routeData._id)}
-                  <Text style={ Styles.textstyle }>
-                    Coordinaten
-                  </Text>
-                  <Button title="Homepage" onPress={() => this.props.navigation.goBack()}></Button>
-                </View>
-            )
-        }
-      
-    }
-
-    render() {
-        return(
-            <View style={Styles.styling}>
-                { this.renderContent() }
-            </View>
-        )
-    }
-
-}
-
-export {Coordinaten};
+        ];*/

@@ -20,7 +20,7 @@ class API {
          .then( data => {  /// The return of 'result.json' is passed on as 'data'     
             //alert("fetch succeeded");
             clearTimeout(killFetch);
-            resolve({ success: true, data: data });
+            resolve({ success: true, data: data.entries });
               /// Everything okay, so resolve 
          })
          .catch( err => {  /// Oops! we got an error! let's 'reject' this call!
