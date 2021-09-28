@@ -29,22 +29,26 @@ class Coordinaten extends Component {
             });
         })
     }
-
+    renderAnItem(item){
+        return(
+            <View key={item._id} style={stylist.styling}>
+                <Text>
+                    <Text style={stylist.textstyle}>{item.Plaatsnaam}</Text> 
+                    <Text style={stylist.textstyle}>{item.Straatnaam}</Text>
+                </Text>
+                <Button title="Homepage" onPress={() => this.props.navigation.goBack()}></Button>
+            </View>
+        )
+    }
     renderContent() {
         var datas = this.state.data.filter((item) => item.Route_id == this.props.item._id);
         console.warn(this.props.item)
         if(this.state.isLoaded) {
             return(
                 <FlatList data={datas}
-                renderItem={({item}) =>
-                    (<View key={item._id} style={stylist.styling}>
-                        <Text>
-                            <Text style={stylist.textstyle}>{item.Plaatsnaam}</Text> 
-                            <Text style={stylist.textstyle}>{item.Straatnaam}</Text>
-                        </Text>
-                        <Button title="Homepage" onPress={() => this.props.navigation.goBack()}></Button>
-                    </View>)}
-                />
+                renderItem={(item) => this.renderAnItem(item)}
+                keyExtractor={ item => item._id.toString()}/>
+                    
             )
         }
       
