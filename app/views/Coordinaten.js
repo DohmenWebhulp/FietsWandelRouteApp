@@ -56,6 +56,7 @@ class Coordinaten extends Component {
         if(this.state.isLoaded) {
             return(
                 <ScrollView>
+                    <MapView></MapView>
                     <Button title="Homepage" onPress={() => this.props.navigation.goBack()}></Button>
                     <FlatList data={datas}
                     renderItem={(item) => this.renderAnItem(item)}
