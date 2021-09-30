@@ -4,10 +4,10 @@ class API {
 
     static fetchData = (url) => new Promise( (resolve, reject) => {
       
-         /// This URL takes several seconds to complete so we can test some features. 
+         // This URL takes several seconds to complete so we can test some features. 
          //let url = "https://api.dev-master.ninja/reactjs/slow/";
 
-         let killFetch = setTimeout( () => {
+        let killFetch = setTimeout( () => {
             console.warn("TIMEOUT!!!");
             alert("TIMEOUT");
             reject({ success: false, error: 'Timeout occured' });

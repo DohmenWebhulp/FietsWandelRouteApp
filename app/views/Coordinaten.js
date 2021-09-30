@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import { View, Text, SafeAreaView, Button, FlatList, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, Button, FlatList, ScrollView, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
 import * as stylist from '../resources/styles/Styles';
 import API from '../lib/API.js';
