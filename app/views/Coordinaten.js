@@ -1,8 +1,11 @@
 import React, { Component} from 'react';
 import { View, Text, SafeAreaView, Button, FlatList, ScrollView, Dimensions } from 'react-native';
 import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
 import * as stylist from '../resources/styles/Styles';
 import API from '../lib/API.js';
+
 class Coordinaten extends Component {
 
     constructor(props) {
@@ -94,9 +97,28 @@ class Coordinaten extends Component {
     }
 
     render() {
+        var datas = this.state.data.filter((item) => item.Route_id == this.state.route._id);
+        var APIKEY_Google = "AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU";
         return(
             <View>
-                <MapView style={stylist.map}></MapView>
+                <MapView style={stylist.map}>
+                    {datas.map((marker) =>
+                    (<Marker key={marker._id}
+                        coordinate={{latitude: parseFloat(marker.Lengtegraad), 
+                                     longitude: parseFloat(marker.Breedtegraad)}}
+                        title={marker.Plaatsnaam}
+                        description={marker.Straatnaam}/>))}
+                    <MapViewDirections
+                        origin={{latitude: parseFloat(datas[0].Lengtegraad), 
+                            longitude: parseFloat(datas[0].Breedtegraad)}}
+                        destination={{latitude: parseFloat(datas[1].Lengtegraad), 
+                            longitude: parseFloat(datas[1].Breedtegraad)}}
+                        apikey={APIKEY_Google}
+                        strokeWidth={3}
+                    >
+
+                    </MapViewDirections>
+                </MapView>
             </View>
         )
     }
