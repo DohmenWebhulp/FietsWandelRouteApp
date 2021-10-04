@@ -20,7 +20,8 @@ class Aanrading extends Component {
             radius: 0
         }
     }
-
+    //Alle fietsroutes moeten gefetchd worden omdat ze getoond moeten worden.
+    //Alle tussenstops moeten gefetchd worden omdat elke tussenstop in de buurt gezocht moet worden.
     componentDidMount() {
         let url2 = "https://cockpit.educom.nu/api/collections/get/Tussenstops?token=9d13205f131c93ba9b696c5761a0d5";
         this.fetchData(url2)

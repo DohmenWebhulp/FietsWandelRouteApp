@@ -96,7 +96,7 @@ class Coordinaten extends Component {
     render() {
         return(
             <View>
-                { this.renderContent() }
+                <MapView style={stylist.map}></MapView>
             </View>
         )
     }

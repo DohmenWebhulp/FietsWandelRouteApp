@@ -19,6 +19,9 @@
     "ios": {
       "supportsTablet": true
     },
+    "packagerOpts": {
+      "assetExts": ["ttf", "mp4"]
+    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
