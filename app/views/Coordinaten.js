@@ -42,7 +42,7 @@ class Coordinaten extends Component {
         )
     }
     renderContent() {
-
+        //Waar kan dit stukje het beste?
         //Alleen de tussenstops die bij de aangeklikte route horen moeten getoond worden.
         var datas = this.state.data.filter((item) => item.Route_id == this.state.route._id);
         var cumArray = this.calculateCumulativeDistances(datas);
@@ -56,7 +56,6 @@ class Coordinaten extends Component {
         if(this.state.isLoaded) {
             return(
                 <ScrollView>
-                    <MapView></MapView>
                     <Button title="Homepage" onPress={() => this.props.navigation.goBack()}></Button>
                     <FlatList data={datas}
                     renderItem={(item) => this.renderAnItem(item)}
@@ -96,7 +95,7 @@ class Coordinaten extends Component {
 
     render() {
         return(
-            <View style={stylist.styling}>
+            <View>
                 { this.renderContent() }
             </View>
         )

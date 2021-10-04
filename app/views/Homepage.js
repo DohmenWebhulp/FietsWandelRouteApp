@@ -1,5 +1,5 @@
 import React, { Component} from 'react';
-import { View, Text, SafeAreaView, Button, FlatList } from 'react-native';
+import { ScrollView, View, Text, SafeAreaView, Button, FlatList } from 'react-native';
 import * as stylist from '../resources/styles/Styles';
 import API from '../lib/API.js';
 
@@ -49,9 +49,13 @@ class Homepage extends Component {
     renderContent() {
         if(this.state.isLoaded) {
             return(
-                <FlatList data={this.state.data}
-                renderItem={({item}) => this.renderAnItem(item)}
-                />
+                <ScrollView>
+                    <FlatList data={this.state.data}
+                    renderItem={({item}) => this.renderAnItem(item)}
+                    />
+                    <Button title="Aanrading" 
+                                onPress={() => this.props.navigation.navigate('Aanrading')}/>
+                </ScrollView>
             )
         }
         
@@ -61,8 +65,6 @@ class Homepage extends Component {
         return(
             <View>
                 { this.renderContent() }
-                <Button title="Aanrading" 
-                            onPress={() => this.props.navigation.navigate('Aanrading')}/>
             </View>
         )
     }

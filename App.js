@@ -29,6 +29,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Coordinaten } from './app/views/Coordinaten.js';
 import { Homepage } from './app/views/Homepage.js';
+import { Aanrading } from './app/views/Aanrading.js';
 import { Provider } from "react-redux";
 import API from "./app/lib/API.js";
 import * as stylist from "./app/resources/styles/Styles.js";
@@ -85,7 +86,8 @@ export default class App extends Component {
             <NavigationContainer style={stylist.styling}>
                     <Stack.Navigator screenOptions={{headerShown: false}}>
                         <Stack.Screen name="Homepage" component={ Homepage }/>   
-                        <Stack.Screen name="Coordinaten" component={ Coordinaten}/>        
+                        <Stack.Screen name="Coordinaten" component={ Coordinaten}/>
+                        <Stack.Screen name="Aanrading" component={ Aanrading}/>            
                     </Stack.Navigator>
                 </NavigationContainer>
         )
