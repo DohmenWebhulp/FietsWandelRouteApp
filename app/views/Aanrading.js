@@ -44,6 +44,7 @@ class Aanrading extends Component {
 
     renderRoutes(){
         var closeRoutes = this.searchCloseRoutes();
+        console.warn(closeRoutes);
         return(
             <FlatList 
                 data={closeRoutes}
@@ -96,7 +97,7 @@ class Aanrading extends Component {
                     }
                 }
             }
-            console.warn(closeRoutes);
+            
             return closeRoutes;
         }
     }
