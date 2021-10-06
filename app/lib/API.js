@@ -20,7 +20,7 @@ class API {
          .then( data => {  /// The return of 'result.json' is passed on as 'data'     
             //alert("fetch succeeded");
             clearTimeout(killFetch);
-            resolve({ success: true, data: data.entries });
+            resolve({ key: url.substring(46), success: true, data: data.entries });
               /// Everything okay, so resolve 
          })
          .catch( err => {  /// Oops! we got an error! let's 'reject' this call!
@@ -43,6 +43,34 @@ class API {
         .then(response => response.json())
         .then(data => {
             //alert("post succeeded");
+            resolve(data);
+        })
+        .catch( error => {
+            reject(error);
+        });
+    })
+
+    static fetchTwice = (url1, url2) => new Promise((resolve, reject) => {
+
+        let data = {fietsroutes: {}, tussenstops: {}};
+
+        Promise.all([
+            API.fetchData(url1),
+            API.fetchData(url2)
+        ])
+        .then( result => {
+            result.forEach (item => {
+                switch(item.key){
+                    case "Fietsroute?token=9d13205f131c93ba9b696c5761a0d5": {
+                        data.fietsroutes = item.data;
+                        break;
+                    }
+                    case "Tussenstops?token=9d13205f131c93ba9b696c5761a0d5": {
+                        data.tussenstops = item.data;
+                        break;
+                    }
+                }
+            })
             resolve(data);
         })
         .catch( error => {

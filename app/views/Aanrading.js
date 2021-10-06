@@ -23,24 +23,23 @@ class Aanrading extends Component {
     //Alle fietsroutes moeten gefetchd worden omdat ze getoond moeten worden.
     //Alle tussenstops moeten gefetchd worden omdat elke tussenstop in de buurt gezocht moet worden.
     componentDidMount() {
+        let url1 = "https://cockpit.educom.nu/api/collections/get/Fietsroute?token=9d13205f131c93ba9b696c5761a0d5";
         let url2 = "https://cockpit.educom.nu/api/collections/get/Tussenstops?token=9d13205f131c93ba9b696c5761a0d5";
-        this.fetchData(url2)
-        this.setState({
-            dataStops: this.state.data
-        })
+        this.multipleFetch(url1, url2);
     }
-
-    fetchData(url) {
-        API.fetchData(url)
+    
+    multipleFetch(url1, url2){
+        API.fetchTwice(url1, url2)
         .then( result => {
-            //console.warn(result);
+            console.warn(result);
             this.setState({
                 isLoaded: true,
-                data: result.data,
+                dataRoutes: result.fietsroutes,
+                dataStops: result.tussenstops,
             });
         })
     }
-    
+
     renderAnItem(item){
         return(
             <View key={item.item._id} style={stylist.styling}>
@@ -51,36 +50,38 @@ class Aanrading extends Component {
         )
     }
 
-    submitForRoutes(){
-        this.setState({isLoaded: false});
-        let url1 = "https://cockpit.educom.nu/api/collections/get/Fietsroute?token=9d13205f131c93ba9b696c5761a0d5";
-        this.fetchData(url1);
+    renderRoutes(){
+        this.searchCloseRoutes();
     }
 
-    componentDidUpdate(){
+    searchCloseRoutes(){
         if(this.state.isLoaded){
             this.setState({ dataRoutes: this.state.data});
+
             //Filter alle fiets/wandelroutes
             var datas = this.state.dataRoutes.filter((item) => item.Record_Type == this.state.record);
+
             //Filter de stop eruit met dezelfde plaats- en straatnaam als de opgegeven plaats- en straatnaam.
             //Dit is nu aangevuld met coordinateninfo.
             var stop = this.state.dataStops.filter((item) => item.Plaatsnaam == this.state.plaats
                                                         &&    item.Straatnaam == this.state.straat)
-            //console.warn(stops);
-            var closeStops = [];
-            var closeRoutes = [];
-            //Filter uit alle stops die closeStops die dicht genoeg bij opgehaalde stop liggen.
+
+            var closeStops = []; var closeRoutes = [];
+
+            //Filter uit alle stops de closeStops die dicht genoeg bij opgehaalde stop liggen.
             for(var i = 0; i < this.state.dataStops.length; i++){
                 if(this.calculateDistance(this.state.dataStops[i], stop) <= this.state.radius){
                     closeStops.push(this.state.dataStops[i]);
                 } 
             }
+
             //Filter uit alle routes die closeRoutes waar de closeStops onderdeel van uitmaken
             for(var j = 0; j < closeStops.length; j++){
                 if(closeStops[j].Route_id == datas[j]._id){
                     closeRoutes.push(datas[j]);
                 }
             }
+
             return closeRoutes;
         }
     }
@@ -120,7 +121,7 @@ class Aanrading extends Component {
                         <Text>Zoekradius</Text>
                         <TextInput style={stylist.textfield}>Zoekradius</TextInput>
                     </View>
-                    <Button title='Zoek routes' onPress={() => this.submitForRoutes()}></Button>
+                    <Button title='Zoek routes' onPress={() => this.renderRoutes()}></Button>
                 </View>
             )
         }else{
