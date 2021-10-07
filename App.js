@@ -87,7 +87,7 @@ export default class App extends Component {
             <NavigationContainer style={stylist.styling}>
                     <Stack.Navigator screenOptions={{headerShown: false}}>
                         <Stack.Screen name="Homepage" component={ Homepage }/> 
-                        <Stack.Screen name="Tussenstop" component={ TussenstopDetail }/>
+                        <Stack.Screen name="TussenstopDetail" component={ TussenstopDetail }/>
                         <Stack.Screen name="Coordinaten" component={ Coordinaten }/>
                         <Stack.Screen name="Aanrading" component={ Aanrading }/>            
                     </Stack.Navigator>

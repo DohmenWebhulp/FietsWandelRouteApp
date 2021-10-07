@@ -44,9 +44,13 @@ class Aanrading extends Component {
         })
     }
 
-    renderRoutes(){
+    goToSearch(){
         var closeRoutes = this.searchCloseRoutes();
         console.warn(closeRoutes);
+        this.setState({clRoutes: closeRoutes, showRoutes: true});
+    }
+
+    renderRoutes(){
         if(this.state.showRoutes){
             return(
                 <FlatList 
@@ -61,15 +65,16 @@ class Aanrading extends Component {
     //showState op aan zetten als op knop gedrukt wordt
 
     renderAnItem(item){
+        console.warn(item);
         return(
-            <View key={item._id} style={stylist.styling}>
+            <View key={item.item._id} style={stylist.styling}>
                 <Text>
-                    <Text style={stylist.textstyle}>{item.routeNaam}</Text> 
-                    <Text style={stylist.textstyle}>{item.Afstand}</Text>
+                    <Text style={stylist.textstyle}>{item.item.routeNaam}</Text> 
+                    <Text style={stylist.textstyle}>{item.item.Afstand}</Text>
                 </Text>
-                <Text>{item.Omschrijving}</Text>
-                <Button title="Ga naar Kaart" 
-                    onPress={() => this.props.navigation.navigate('Coordinaten', { item: item})}/>
+                <Text>{item.item.Omschrijving}</Text>
+                <Button title="Tussenstopinfo" 
+                    onPress={() => this.props.navigation.navigate('TussenstopDetail', { item: item.item})}/>
             </View>
         )
     }
@@ -101,7 +106,6 @@ class Aanrading extends Component {
                 }
             }
         }
-        this.setState({clRoutes: closeRoutes});
         return closeRoutes;
     }
 
@@ -130,7 +134,7 @@ class Aanrading extends Component {
                         <TextInput style={stylist.textfield} placeholder="Zoekradius"
                         onChangeText={(text) => {this.setState({radius: text})}}></TextInput>
                     </View>
-                    <Button title='Zoek routes' onPress={() => this.setState({showRoutes: true})}></Button>
+                    <Button title='Zoek routes' onPress={() => {this.goToSearch()}}></Button>
                     {this.renderRoutes()}
                 </View>
             )
@@ -138,15 +142,13 @@ class Aanrading extends Component {
             <Text>Spinner</Text>
         }
     }
-//this.setState({showRoutes: true})
     render() {
         return(
-            <View>
+            <ScrollView>
                 { this.renderContent() }
-            </View>
+            </ScrollView>
         )
     }
-
 }
 
 export {Aanrading};

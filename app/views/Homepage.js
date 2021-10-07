@@ -2,6 +2,7 @@ import React, { Component} from 'react';
 import { ScrollView, View, Text, SafeAreaView, Button, FlatList } from 'react-native';
 import * as stylist from '../resources/styles/Styles';
 import API from '../lib/API.js';
+import Calculations from '../lib/Calculations';
 
 class Homepage extends Component {
 

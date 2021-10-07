@@ -54,7 +54,7 @@ class TussenstopDetail extends Component {
         if(this.state.isLoaded) {
             return(
                 <ScrollView>
-                    <Button title="Homepage" onPress={() => this.props.navigation.goBack()}></Button>
+                    <Button title="Ga naar Kaart" onPress={() => this.props.navigation.navigate('Coordinaten', {item: this.state.route})}></Button>
                     <FlatList data={data}
                     renderItem={(item) => this.renderAnItem(item)}
                     keyExtractor={ item => item._id.toString()}/>

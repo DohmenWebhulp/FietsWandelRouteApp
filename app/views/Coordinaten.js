@@ -35,33 +35,6 @@ class Coordinaten extends Component {
             });
         })
     }
-    renderAnItem(item){
-        return(
-            <View key={item.item._id} style={stylist.styling}>
-                <Text style={stylist.textstyle}>{item.item.Plaatsnaam}</Text> 
-                <Text style={stylist.textstyle}>{item.item.Straatnaam}</Text>
-                <Text style={stylist.textstyle}>Afstand: {item.item.Afstand} km</Text>
-            </View>
-        )
-    }
-    renderContent() {
-
-        //Alleen de tussenstops die bij de aangeklikte route horen moeten getoond worden.
-        var datas = this.state.data.filter((item) => item.Route_id == this.state.route._id);
-        var cumArray = Calculations.calculateCumulativeDistances(datas);
-        var data = Calculations.roundUpDistance(datas, cumArray);
-
-        if(this.state.isLoaded) {
-            return(
-                <ScrollView>
-                    <Button title="Homepage" onPress={() => this.props.navigation.goBack()}></Button>
-                    <FlatList data={data}
-                    renderItem={(item) => this.renderAnItem(item)}
-                    keyExtractor={ item => item._id.toString()}/>
-                </ScrollView>
-            )
-        }
-    }
 
     render() {
         var datas = this.state.data.filter((item) => item.Route_id == this.state.route._id);
