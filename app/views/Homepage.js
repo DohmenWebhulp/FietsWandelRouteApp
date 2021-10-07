@@ -40,8 +40,8 @@ class Homepage extends Component {
                     <Text style={stylist.textstyle}>{item.Afstand}</Text>
                 </Text>
                 <Text>{item.Omschrijving}</Text>
-                <Button title="Coordinaten" 
-                    onPress={() => this.props.navigation.navigate('Coordinaten', { item: item})}/>
+                <Button title="Tussenstopinfo" 
+                    onPress={() => this.props.navigation.navigate('TussenstopDetail', { item: item})}/>
             </View>
         )
     }

@@ -18,7 +18,9 @@ class Aanrading extends Component {
             plaats: '',
             straat: '',
             record: '',
-            radius: 0
+            radius: 0,
+            showRoutes: false,
+            clRoutes: []
         }
     }
     //Alle fietsroutes moeten gefetchd worden omdat ze getoond moeten worden.
@@ -45,14 +47,18 @@ class Aanrading extends Component {
     renderRoutes(){
         var closeRoutes = this.searchCloseRoutes();
         console.warn(closeRoutes);
-        return(
-            <FlatList 
-                data={closeRoutes}
-                renderItem={(item) => this.renderAnItem(item)}
-                keyExtractor={ item => item._id.toString()}>
-            </FlatList>
-        )
+        if(this.state.showRoutes){
+            return(
+                <FlatList 
+                    data={this.state.clRoutes}
+                    renderItem={(item) => this.renderAnItem(item)}
+                    keyExtractor={ item => item._id.toString()}>
+                </FlatList>
+            )
+        }
     }
+
+    //showState op aan zetten als op knop gedrukt wordt
 
     renderAnItem(item){
         return(
@@ -69,37 +75,34 @@ class Aanrading extends Component {
     }
 
     searchCloseRoutes(){
-        if(this.state.isLoaded){
+        //Filter alle fiets/wandelroutes
+        var datas = this.state.dataRoutes.filter((item) => item.Record_Type == this.state.record);
 
-            //Filter alle fiets/wandelroutes
-            var datas = this.state.dataRoutes.filter((item) => item.Record_Type == this.state.record);
+        //Filter de stop eruit met dezelfde plaats- en straatnaam als de opgegeven plaats- en straatnaam.
+        //Dit is nu aangevuld met coordinateninfo.
+        var stop = this.state.dataStops.filter((item) => item.Plaatsnaam == this.state.plaats
+                                                    &&    item.Straatnaam == this.state.straat)
 
-            //Filter de stop eruit met dezelfde plaats- en straatnaam als de opgegeven plaats- en straatnaam.
-            //Dit is nu aangevuld met coordinateninfo.
-            var stop = this.state.dataStops.filter((item) => item.Plaatsnaam == this.state.plaats
-                                                        &&    item.Straatnaam == this.state.straat)
+        var closeStops = []; var closeRoutes = [];
 
-            var closeStops = []; var closeRoutes = [];
-
-            //Filter uit alle stops de closeStops die dicht genoeg bij opgehaalde stop liggen.
-            for(var i = 0; i < this.state.dataStops.length; i++){
-                if(Calculations.calculateDistance(this.state.dataStops[i], stop[0]) <= this.state.radius){
-                    closeStops.push(this.state.dataStops[i]);
-                } 
-            }
-            
-            //Filter uit alle routes die closeRoutes waar de closeStops onderdeel van uitmaken
-            for(var l = 0; l < datas.length; l++){
-                for(var j = 0; j < closeStops.length; j++){
-                    if(closeStops[j].Route_id == datas[l]._id){
-                        closeRoutes.push(datas[l]);
-                        break;
-                    }
+        //Filter uit alle stops de closeStops die dicht genoeg bij opgehaalde stop liggen.
+        for(var i = 0; i < this.state.dataStops.length; i++){
+            if(Calculations.calculateDistance(this.state.dataStops[i], stop[0]) <= this.state.radius){
+                closeStops.push(this.state.dataStops[i]);
+            } 
+        }
+        
+        //Filter uit alle routes die closeRoutes waar de closeStops onderdeel van uitmaken
+        for(var l = 0; l < datas.length; l++){
+            for(var j = 0; j < closeStops.length; j++){
+                if(closeStops[j].Route_id == datas[l]._id){
+                    closeRoutes.push(datas[l]);
+                    break;
                 }
             }
-            
-            return closeRoutes;
         }
+        this.setState({clRoutes: closeRoutes});
+        return closeRoutes;
     }
 
     renderContent() {
@@ -127,14 +130,15 @@ class Aanrading extends Component {
                         <TextInput style={stylist.textfield} placeholder="Zoekradius"
                         onChangeText={(text) => {this.setState({radius: text})}}></TextInput>
                     </View>
-                    <Button title='Zoek routes' onPress={() => this.renderRoutes()}></Button>
+                    <Button title='Zoek routes' onPress={() => this.setState({showRoutes: true})}></Button>
+                    {this.renderRoutes()}
                 </View>
             )
         }else{
             <Text>Spinner</Text>
         }
     }
-
+//this.setState({showRoutes: true})
     render() {
         return(
             <View>
