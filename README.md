@@ -1,6 +1,6 @@
 # FietsWandelRouteApp
 
-Deze Mobiele App is een app die mooie fiets en wandelroutes inzichtelijk maakt in de regio waar gebruikers wonen of graag willen vertieren. Van het inrichten van de structuur van de verschillende schermen ben ik gegaan tot de styling van de schermen tot de integratie van verschillende Google maps API's, voor een visualisatie van de diverse routes.
+Deze Mobiele App is een app die mooie fiets- en wandelroutes inzichtelijk maakt in de regio waar gebruikers wonen of graag willen vertieren. Van het inrichten van de structuur van de verschillende schermen ben ik gegaan tot de styling van de schermen tot de integratie van verschillende Google maps API's, voor een visualisatie van de diverse routes.
 
 # Structuur
 
@@ -25,7 +25,7 @@ De applicatie is met React Native met JavaScript als programmeertaal gerealiseer
 ## Methoden en Technieken
 
 De entiteiten met Primary Key en Foreign Key relaties zijn hieronder te zien in een ERD.
-[!image](./assets/ERD_RouteApp.png)
+[!image](C:\Projecten\FietsWandelRouteApp\assets\ERD_RouteApp.png)
 
 ## Schermen
 
