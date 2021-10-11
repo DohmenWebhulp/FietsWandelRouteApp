@@ -25,7 +25,7 @@ De applicatie is met React Native met JavaScript als programmeertaal gerealiseer
 ## Methoden en Technieken
 
 De entiteiten met Primary Key en Foreign Key relaties zijn hieronder te zien in een ERD.
-[!image](C:\Projecten\FietsWandelRouteApp\assets\ERD_RouteApp.png)
+[!image](~\assets\ERD_RouteApp.png)
 
 ## Schermen
 
