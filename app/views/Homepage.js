@@ -48,7 +48,7 @@ class Homepage extends Component {
     }
 
     renderContent() {
-        if(this.state.isLoaded) {
+        if(this.state.isLoaded) { 
             return(
                 <ScrollView>
                     <FlatList data={this.state.data}
