@@ -38,8 +38,8 @@ class Calculations{
     }
 
     static calculateCoordinates(bg1, bg2, lg1, lg2){
-        latCoord = (bg1 + bg2)/2;
-        lngCoord = (lg1 + lg2)/2;
+        var latCoord = (bg1 + bg2)/2;
+        var lngCoord = (lg1 + lg2)/2;
         return {
             lat: latCoord,
             lng: lngCoord

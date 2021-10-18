@@ -12,7 +12,7 @@ class RouteToevoegen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false, 
+            isLoaded: true, 
             isSend: false, 
             isError: false,  
             data: [], 
@@ -27,100 +27,74 @@ class RouteToevoegen extends Component {
             radius: 0,
             route_id: '',
             extraFields: false,
-            postedRoute: false
+            postedRoute: false,
+            postedStop: false
         }
     }
 
-    //Alle fietsroutes moeten gefetchd worden omdat ze getoond moeten worden.
-    //Alle tussenstops moeten gefetchd worden omdat elke tussenstop in de buurt gezocht moet worden.
     componentDidMount() {
-        let url1 = "https://cockpit.educom.nu/api/collections/get/Fietsroute?token=9d13205f131c93ba9b696c5761a0d5";
-        let url2 = "https://cockpit.educom.nu/api/collections/get/Tussenstops?token=9d13205f131c93ba9b696c5761a0d5";
-        this.multipleFetch(url1, url2);
     }
 
-    multipleFetch(url1, url2){
-        API.fetchTwice(url1, url2)
-        .then( result => {
-            //console.warn(result);
-            this.setState({
-                isLoaded: true,
-                dataRoutes: result.fietsroutes,
-                dataStops: result.tussenstops,
-            });
-        })
-    }
+    //Hier wordt met behulp van de Geocode API de coordinaten opgehaald van de opgegeven locatie.
 
     getGeocode(){
-        url = "https://maps.googleapis.com/maps/api/geocode/json?address=${startplaats},${startstraat},+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
+        
+        var url = "https://maps.googleapis.com/maps/api/geocode/json?address=+"+this.state.startplaats+",+"+this.state.startstraat+",+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
+        //var url = "https://maps.googleapis.com/maps/api/geocode/json?address=+Sittard,+Beukenboomsweg,+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
         API.fetchGeocode(url)
         .then( result => {
-            console.warn(result)
+            //console.warn(result.data.results[0].geometry.bounds)
             this.setState({
-                data: result.data,
+                data: result.data.results[0].geometry.bounds,
                 isSend: true
             });
         });
     }
 
+    //Hier wordt de routeinformatie opgeslagen in Cockpit aan de hand van de ingevulde tekstvelden.
+
     postRoute(){
-        if(this.state.isSend){
-            url = "https://cockpit.educom.nu/api/collections/save/Fietsroute?token=9d13205f131c93ba9b696c5761a0d5"
-            var routeString = this.state.route.toString();
-            var omsString = this.state.omschrijving.toString();
-            var recordString = this.state.record.toString();
+        if(this.state.isSend && !this.state.postedRoute){
+            var url = "https://cockpit.educom.nu/api/collections/save/Fietsroute?token=9d13205f131c93ba9b696c5761a0d5"
             var datas = {
-                routeNaam: routeString,
-                Omschrijving: omsString,
-                Record_Type: recordString
+                "routeNaam": this.state.route,
+                "Omschrijving": this.state.omschrijving,
+                "Record_Type": this.state.record
             }
             API.postData(url, datas)
             .then(result => {
+                //console.warn(result)
                 this.setState({
-                    route_id: result.data._id,
+                    route_id: result._id,
                     postedRoute: true
                 })
             })
         }
     }
 
-    /*postTussenstop(){
-        if(this.state.postedRoute){
-            url = "https://cockpit.educom.nu/api/collections/save/Tussenstops?token=9d13205f131c93ba9b696c5761a0d5"
+    //Hier worden de gemiddelde coordinaten berekend van de opgehaalde geocoded tussenstop.
+    //De tussenstop met informatie wordt vervolgens opgeslagen in cockpit CMS.
+
+    postTussenstop(){
+        if(this.state.postedRoute && !this.state.postedStop){
+            var url = "https://cockpit.educom.nu/api/collections/save/Tussenstops?token=9d13205f131c93ba9b696c5761a0d5";
+            var coords = Calculations.calculateCoordinates(this.state.data.northeast.lat,this.state.data.southwest.lat,
+                                              this.state.data.northeast.lng,this.state.data.southwest.lng);
             var datas = {
-
+                "Plaatsnaam": this.state.startplaats,
+                "Straatnaam": this.state.startstraat,
+                "Lengtegraad": coords.lat,
+                "Breedtegraad": coords.lng,
+                "Route_id": this.state.route_id
             }
+            API.postData(url, datas)
+            .then(result => {
+                console.warn(result)
+                this.setState({
+                    postedStop: true
+                })
+            })
         }
-    }*/
-
-    searchCloseRoutes(){
-        //Filter alle fiets/wandelroutes
-        var datas = this.state.dataRoutes.filter((item) => item.Record_Type == this.state.record);
-
-        //Filter de stop eruit met dezelfde plaats- en straatnaam als de opgegeven plaats- en straatnaam.
-        //Dit is nu aangevuld met coordinateninfo.
-        var stop = this.state.dataStops.filter((item) => item.Plaatsnaam == this.state.plaats
-                                                    &&    item.Straatnaam == this.state.straat)
-
-        var closeStops = []; var closeRoutes = [];
-
-        //Filter uit alle stops de closeStops die dicht genoeg bij opgehaalde stop liggen.
-        for(var i = 0; i < this.state.dataStops.length; i++){
-            if(Calculations.calculateDistance(this.state.dataStops[i], stop[0]) <= this.state.radius){
-                closeStops.push(this.state.dataStops[i]);
-            } 
-        }
-        
-        //Filter uit alle routes die closeRoutes waar de closeStops onderdeel van uitmaken
-        for(var l = 0; l < datas.length; l++){
-            for(var j = 0; j < closeStops.length; j++){
-                if(closeStops[j].Route_id == datas[l]._id){
-                    closeRoutes.push(datas[l]);
-                    break;
-                }
-            }
-        }
-        return closeRoutes;
     }
 
     addFields(){
@@ -155,7 +129,7 @@ class RouteToevoegen extends Component {
                     <View style={{margin: 10}}>
                         <Text>Routenaam</Text>
                         <TextInput style={stylist.textfield} placeholder="Routenaam"
-                        onChangeText={(text)=> {this.setState({route: text})}}></TextInput>
+                        onChangeText={(text) => {this.setState({route: text})}}></TextInput>
                     </View>
                     <View style={{margin: 10}}>
                         <Text>Omschrijving</Text>
@@ -181,6 +155,7 @@ class RouteToevoegen extends Component {
                     <Button title='+ tussenstop' onPress={() => {this.addFields()}}></Button>
                     <Button title='Route Toevoegen' onPress={() => {this.getGeocode()}}></Button>
                     {this.postRoute()}
+                    {this.postTussenstop()}
                 </View>
             )
         }else{

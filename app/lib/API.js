@@ -34,7 +34,7 @@ class API {
         fetch(url)
           .then( result => result.json() ) 
          .then( data => {  
-            resolve({success: true, data: data.results.geometry.bounds });
+            resolve({success: true, data: data });
          })
          .catch( err => { 
              reject({ success: false, error: err });
