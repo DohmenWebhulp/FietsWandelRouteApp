@@ -36,13 +36,12 @@ class Homepage extends Component {
     renderAnItem(item){
         return(
             <View key={item._id} style={stylist.styling}>
-                <Text>
-                    <Text style={stylist.textstyle}>{item.routeNaam}</Text> 
-                    <Text style={stylist.textstyle}>{item.Afstand}</Text>
-                </Text>
+                <Text style={stylist.textstyle}>{item.routeNaam}</Text> 
                 <Text>{item.Omschrijving}</Text>
-                <Button title="Tussenstopinfo" 
-                    onPress={() => this.props.navigation.navigate('TussenstopDetail', { item: item})}/>
+                <View style={{margin: 10}}>
+                    <Button title="Details" 
+                        onPress={() => this.props.navigation.navigate('TussenstopDetail', { item: item})}/>
+                </View>
             </View>
         )
     }
@@ -50,13 +49,16 @@ class Homepage extends Component {
     renderContent() {
         if(this.state.isLoaded) { 
             return(
-                <ScrollView>
-                    <FlatList data={this.state.data}
-                    renderItem={({item}) => this.renderAnItem(item)}
-                    />
-                    <Button title="Aanrading" 
-                                onPress={() => this.props.navigation.navigate('Aanrading')}/>
-                </ScrollView>
+                <FlatList data={this.state.data}
+                renderItem={({item}) => this.renderAnItem(item)}
+                ListHeaderComponent={<View><Text style={stylist.textstyle2}>Routelijst</Text></View>}
+                ListFooterComponent={<View style={stylist.buttonstyle}><Button title="Aanrading" 
+                color='green'
+                keyExtractor={ item => item._id.toString()}
+                onPress={() => this.props.navigation.navigate('Aanrading')}/>
+                <Button title="Route Toevoegen" color='brown' keyExtractor={ item => item._id.toString()}
+                onPress={() => this.props.navigation.navigate('RouteToevoegen')}/></View>}
+                />
             )
         }
         

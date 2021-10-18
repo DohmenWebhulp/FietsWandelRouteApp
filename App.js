@@ -30,6 +30,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Coordinaten } from './app/views/Coordinaten.js';
 import { Homepage } from './app/views/Homepage.js';
 import { Aanrading } from './app/views/Aanrading.js';
+import { RouteToevoegen } from './app/views/RouteToevoegen.js';
 import { TussenstopDetail } from './app/views/TussenstopDetail.js';
 import { Provider } from "react-redux";
 import API from "./app/lib/API.js";
@@ -89,7 +90,8 @@ export default class App extends Component {
                         <Stack.Screen name="Homepage" component={ Homepage }/> 
                         <Stack.Screen name="TussenstopDetail" component={ TussenstopDetail }/>
                         <Stack.Screen name="Coordinaten" component={ Coordinaten }/>
-                        <Stack.Screen name="Aanrading" component={ Aanrading }/>            
+                        <Stack.Screen name="Aanrading" component={ Aanrading }/> 
+                        <Stack.Screen name="RouteToevoegen" component={ RouteToevoegen}/>           
                     </Stack.Navigator>
                 </NavigationContainer>
         )

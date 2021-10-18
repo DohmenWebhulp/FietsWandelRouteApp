@@ -12,7 +12,8 @@ class RouteToevoegen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false,  
+            isLoaded: false, 
+            isSend: false, 
             isError: false,  
             data: [], 
             dataStops: [],
@@ -20,15 +21,16 @@ class RouteToevoegen extends Component {
             route: '',
             omschrijving: '',
             stops: [],
-            plaats: '',
-            straat: '',
+            startplaats: '',
+            startstraat: '',
             record: '',
             radius: 0,
-            showRoutes: false,
-            clRoutes: [],
-            extraFields: false
+            route_id: '',
+            extraFields: false,
+            postedRoute: false
         }
     }
+
     //Alle fietsroutes moeten gefetchd worden omdat ze getoond moeten worden.
     //Alle tussenstops moeten gefetchd worden omdat elke tussenstop in de buurt gezocht moet worden.
     componentDidMount() {
@@ -36,6 +38,7 @@ class RouteToevoegen extends Component {
         let url2 = "https://cockpit.educom.nu/api/collections/get/Tussenstops?token=9d13205f131c93ba9b696c5761a0d5";
         this.multipleFetch(url1, url2);
     }
+
     multipleFetch(url1, url2){
         API.fetchTwice(url1, url2)
         .then( result => {
@@ -48,40 +51,47 @@ class RouteToevoegen extends Component {
         })
     }
 
-    goToSearch(){
-        var closeRoutes = this.searchCloseRoutes();
-        console.warn(closeRoutes);
-        this.setState({clRoutes: closeRoutes, showRoutes: true});
+    getGeocode(){
+        url = "https://maps.googleapis.com/maps/api/geocode/json?address=${startplaats},${startstraat},+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
+        API.fetchGeocode(url)
+        .then( result => {
+            console.warn(result)
+            this.setState({
+                data: result.data,
+                isSend: true
+            });
+        });
     }
 
-    renderRoutes(){
-        if(this.state.showRoutes){
-            return(
-                <FlatList 
-                    data={this.state.clRoutes}
-                    renderItem={(item) => this.renderAnItem(item)}
-                    keyExtractor={ item => item._id.toString()}>
-                </FlatList>
-            )
+    postRoute(){
+        if(this.state.isSend){
+            url = "https://cockpit.educom.nu/api/collections/save/Fietsroute?token=9d13205f131c93ba9b696c5761a0d5"
+            var routeString = this.state.route.toString();
+            var omsString = this.state.omschrijving.toString();
+            var recordString = this.state.record.toString();
+            var datas = {
+                routeNaam: routeString,
+                Omschrijving: omsString,
+                Record_Type: recordString
+            }
+            API.postData(url, datas)
+            .then(result => {
+                this.setState({
+                    route_id: result.data._id,
+                    postedRoute: true
+                })
+            })
         }
     }
 
-    //showState op aan zetten als op knop gedrukt wordt
+    /*postTussenstop(){
+        if(this.state.postedRoute){
+            url = "https://cockpit.educom.nu/api/collections/save/Tussenstops?token=9d13205f131c93ba9b696c5761a0d5"
+            var datas = {
 
-    renderAnItem(item){
-        console.warn(item);
-        return(
-            <View key={item.item._id} style={stylist.styling}>
-                <Text>
-                    <Text style={stylist.textstyle}>{item.item.routeNaam}</Text> 
-                    <Text style={stylist.textstyle}>{item.item.Afstand}</Text>
-                </Text>
-                <Text>{item.item.Omschrijving}</Text>
-                <Button title="Tussenstopinfo" 
-                    onPress={() => this.props.navigation.navigate('TussenstopDetail', { item: item.item})}/>
-            </View>
-        )
-    }
+            }
+        }
+    }*/
 
     searchCloseRoutes(){
         //Filter alle fiets/wandelroutes
@@ -115,9 +125,6 @@ class RouteToevoegen extends Component {
 
     addFields(){
         this.setState({extraFields: true});
-        const Google_key = "AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU";
-        url = "https://maps.googleapis.com/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=${Google_key}"
-        Geocoder.geocode
     }
 
     extraStops(){
@@ -144,7 +151,7 @@ class RouteToevoegen extends Component {
         if(this.state.isLoaded) {
             return(
                 <View>
-                    <Text style={stylist.textstyle2}>Zoek nabijgelegen routes:</Text>
+                    <Text style={stylist.textstyle2}>Voeg nieuwe Route toe:</Text>
                     <View style={{margin: 10}}>
                         <Text>Routenaam</Text>
                         <TextInput style={stylist.textfield} placeholder="Routenaam"
@@ -153,27 +160,27 @@ class RouteToevoegen extends Component {
                     <View style={{margin: 10}}>
                         <Text>Omschrijving</Text>
                         <TextInput style={stylist.textfield} placeholder="Omschrijving"
-                        onChangeText={(text)=> {this.setState({omschrijving: text})}}></TextInput>
+                        onChangeText={(text) => {this.setState({omschrijving: text})}}></TextInput>
                     </View>
                     <View style={{margin: 10}}>
                         <Text>Fietsen of Wandelen?</Text>
                         <TextInput style={stylist.textfield} placeholder="F of W?"
-                        onChangeText={(text)=> {this.setState({record: text})}}></TextInput>
+                        onChangeText={(text) => {this.setState({record: text})}}></TextInput>
                     </View>
                     <View style={{margin: 10}}>
                         <Text>Plaatsnaam</Text>
                         <TextInput style={stylist.textfield} placeholder="Plaatsnaam"
-                        onChangeText={(text) => {this.setState({plaats: text})}}></TextInput>
+                        onChangeText={(text) => {this.setState({startplaats: text})}}></TextInput>
                     </View>
                     <View style={{margin: 10}}>
                         <Text>Straatnaam</Text>
                         <TextInput style={stylist.textfield} placeholder="Straatnaam"
-                        onChangeText={(text) => {this.setState({straat: text})}}></TextInput>
+                        onChangeText={(text) => {this.setState({startstraat: text})}}></TextInput>
                     </View>
                     {this.extraStops()}
                     <Button title='+ tussenstop' onPress={() => {this.addFields()}}></Button>
-                    <Button title='Zoek routes' onPress={() => {this.goToSearch()}}></Button>
-                    {this.renderRoutes()}
+                    <Button title='Route Toevoegen' onPress={() => {this.getGeocode()}}></Button>
+                    {this.postRoute()}
                 </View>
             )
         }else{

@@ -134,8 +134,10 @@ class Aanrading extends Component {
                         <TextInput style={stylist.textfield} placeholder="Zoekradius"
                         onChangeText={(text) => {this.setState({radius: text})}}></TextInput>
                     </View>
-                    <Button title='Zoek routes' onPress={() => {this.goToSearch()}}></Button>
-                    {this.renderRoutes()}
+                    <View style={stylist.buttonstyle}>
+                        <Button title='Zoek routes' onPress={() => {this.goToSearch()}}></Button>
+                        {this.renderRoutes()}
+                    </View>
                 </View>
             )
         }else{

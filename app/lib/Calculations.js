@@ -36,5 +36,14 @@ class Calculations{
         }
         return datas;
     }
+
+    static calculateCoordinates(bg1, bg2, lg1, lg2){
+        latCoord = (bg1 + bg2)/2;
+        lngCoord = (lg1 + lg2)/2;
+        return {
+            lat: latCoord,
+            lng: lngCoord
+        }
+    }
 }
 export default Calculations;

@@ -44,6 +44,7 @@ class TussenstopDetail extends Component {
             </View>
         )
     }
+
     renderContent() {
 
         //Alleen de tussenstops die bij de aangeklikte route horen moeten getoond worden.
@@ -53,12 +54,13 @@ class TussenstopDetail extends Component {
 
         if(this.state.isLoaded) {
             return(
-                <ScrollView>
-                    <Button title="Ga naar Kaart" onPress={() => this.props.navigation.navigate('Coordinaten', {item: this.state.route})}></Button>
-                    <FlatList data={data}
-                    renderItem={(item) => this.renderAnItem(item)}
-                    keyExtractor={ item => item._id.toString()}/>
-                </ScrollView>
+                <FlatList data={data}
+                renderItem={(item) => this.renderAnItem(item)}
+                keyExtractor={ item => item._id.toString()}
+                ListHeaderComponent={<View><Text style={stylist.textstyle2}>Tussenstoplijst</Text></View>}
+                ListFooterComponent={<View style={stylist.buttonstyle}><Button title="Ga naar Kaart" 
+                color='purple'
+                onPress={() => this.props.navigation.navigate('Coordinaten', {item: this.state.route})}></Button></View>}/>
             )
         }
     }

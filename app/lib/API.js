@@ -18,7 +18,6 @@ class API {
           fetch(url)
           .then( result => result.json() ) /// convert the result to a JSON object
          .then( data => {  /// The return of 'result.json' is passed on as 'data'     
-            //alert("fetch succeeded");
             clearTimeout(killFetch);
             resolve({ key: url.substring(46), success: true, data: data.entries });
               /// Everything okay, so resolve 
@@ -29,6 +28,18 @@ class API {
          });
       
     });
+
+    static fetchGeocode = (url) => new Promise((resolve, reject) => {
+
+        fetch(url)
+          .then( result => result.json() ) 
+         .then( data => {  
+            resolve({success: true, data: data.results.geometry.bounds });
+         })
+         .catch( err => { 
+             reject({ success: false, error: err });
+         }); 
+    })
 
     static postData = (url, data) => new Promise( (resolve, reject) => {
         const body = new FormData();
