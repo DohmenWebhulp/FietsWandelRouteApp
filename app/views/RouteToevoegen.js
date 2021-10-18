@@ -40,7 +40,7 @@ class RouteToevoegen extends Component {
     getGeocode(){
         
         var url = "https://maps.googleapis.com/maps/api/geocode/json?address=+"+this.state.startplaats+",+"+this.state.startstraat+",+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
-        //var url = "https://maps.googleapis.com/maps/api/geocode/json?address=+Sittard,+Beukenboomsweg,+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
+        //var url = "https://maps.googleapis.com/maps/api/geocode/json?address=+Limbricht,+Beukenboomsweg,+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
         API.fetchGeocode(url)
         .then( result => {
             //console.warn(result.data.results[0].geometry.bounds)
@@ -165,7 +165,7 @@ class RouteToevoegen extends Component {
     render() {  
         return(
             <ScrollView>
-                { this.renderContent() }
+                {this.renderContent()}
             </ScrollView>
         )
     }
