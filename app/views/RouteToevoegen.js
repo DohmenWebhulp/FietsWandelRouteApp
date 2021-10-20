@@ -15,18 +15,19 @@ class RouteToevoegen extends Component {
             isLoaded: true, 
             isSend: false, 
             isError: false,  
-            data: [], 
+            dataStart: [],
+            dataEind: [],
             dataStops: [],
             dataRoutes: [],
             route: '',
             omschrijving: '',
-            stops: [],
             startplaats: '',
             startstraat: '',
+            eindplaats: '',
+            eindstraat: '',
             record: '',
             radius: 0,
             route_id: '',
-            extraFields: false,
             postedRoute: false,
             postedStop: false
         }
@@ -39,13 +40,15 @@ class RouteToevoegen extends Component {
 
     getGeocode(){
         
-        var url = "https://maps.googleapis.com/maps/api/geocode/json?address=+"+this.state.startplaats+",+"+this.state.startstraat+",+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
+        var url1 = "https://maps.googleapis.com/maps/api/geocode/json?address=+"+this.state.startplaats+",+"+this.state.startstraat+",+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
+        var url2 = "https://maps.googleapis.com/maps/api/geocode/json?address=+"+this.state.eindplaats+",+"+this.state.eindstraat+",+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
         //var url = "https://maps.googleapis.com/maps/api/geocode/json?address=+Limbricht,+Beukenboomsweg,+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
-        API.fetchGeocode(url)
+        API.fetchGeocodeTwice(url1, url2)
         .then( result => {
-            //console.warn(result.data.results[0].geometry.bounds)
+            //console.warn(result)
             this.setState({
-                data: result.data.results[0].geometry.bounds,
+                dataStart: result.start.geometry.bounds,
+                dataEind: result.eind.geometry.bounds,
                 isSend: true
             });
         });
@@ -78,15 +81,25 @@ class RouteToevoegen extends Component {
     postTussenstop(){
         if(this.state.postedRoute && !this.state.postedStop){
             var url = "https://cockpit.educom.nu/api/collections/save/Tussenstops?token=9d13205f131c93ba9b696c5761a0d5";
-            var coords = Calculations.calculateCoordinates(this.state.data.northeast.lat,this.state.data.southwest.lat,
-                                              this.state.data.northeast.lng,this.state.data.southwest.lng);
-            var datas = {
+            var coordsStart = Calculations.calculateCoordinates(this.state.dataStart.northeast.lat,this.state.dataStart.southwest.lat,
+                                              this.state.dataStart.northeast.lng,this.state.dataStart.southwest.lng);
+            var coordsEind = Calculations.calculateCoordinates(this.state.dataEind.northeast.lat,this.state.dataEind.southwest.lat,
+                                                this.state.dataEind.northeast.lng,this.state.dataEind.southwest.lng);
+            var datasStart = {
                 "Plaatsnaam": this.state.startplaats,
                 "Straatnaam": this.state.startstraat,
-                "Lengtegraad": coords.lat,
-                "Breedtegraad": coords.lng,
+                "Lengtegraad": coordsStart.lat,
+                "Breedtegraad": coordsStart.lng,
                 "Route_id": this.state.route_id
             }
+            var datasEind = {
+                "Plaatsnaam": this.state.eindplaats,
+                "Straatnaam": this.state.eindstraat,
+                "Lengtegraad": coordsEind.lat,
+                "Breedtegraad": coordsEind.lng,
+                "Route_id": this.state.route_id
+            }
+            var datas = [datasStart, datasEind];
             API.postData(url, datas)
             .then(result => {
                 console.warn(result)
@@ -97,13 +110,13 @@ class RouteToevoegen extends Component {
         }
     }
 
-    addFields(){
+    /*addFields(){
         this.setState({extraFields: true});
     }
 
     extraStops(){
         if(this.state.extraFields){
-            this.setState({extraFields: false});
+            //this.setState({extraFields: false});
             return(
                 <View>
                     <View style={{margin: 10}}>
@@ -119,7 +132,7 @@ class RouteToevoegen extends Component {
                 </View>
             )
         }
-    }
+    }*/
 
     renderContent() {
         if(this.state.isLoaded) {
@@ -142,17 +155,25 @@ class RouteToevoegen extends Component {
                         onChangeText={(text) => {this.setState({record: text})}}></TextInput>
                     </View>
                     <View style={{margin: 10}}>
-                        <Text>Plaatsnaam</Text>
+                        <Text>Startplaats</Text>
                         <TextInput style={stylist.textfield} placeholder="Plaatsnaam"
                         onChangeText={(text) => {this.setState({startplaats: text})}}></TextInput>
                     </View>
                     <View style={{margin: 10}}>
-                        <Text>Straatnaam</Text>
+                        <Text>Startstraat</Text>
                         <TextInput style={stylist.textfield} placeholder="Straatnaam"
                         onChangeText={(text) => {this.setState({startstraat: text})}}></TextInput>
                     </View>
-                    {this.extraStops()}
-                    <Button title='+ tussenstop' onPress={() => {this.addFields()}}></Button>
+                    <View style={{margin: 10}}>
+                        <Text>Eindplaats</Text>
+                        <TextInput style={stylist.textfield} placeholder="Plaatsnaam"
+                        onChangeText={(text) => {this.setState({eindplaats: text})}}></TextInput>
+                    </View>
+                    <View style={{margin: 10}}>
+                        <Text>Eindstraat</Text>
+                        <TextInput style={stylist.textfield} placeholder="Straatnaam"
+                        onChangeText={(text) => {this.setState({eindstraat: text})}}></TextInput>
+                    </View>
                     <Button title='Route Toevoegen' onPress={() => {this.getGeocode()}}></Button>
                     {this.postRoute()}
                     {this.postTussenstop()}

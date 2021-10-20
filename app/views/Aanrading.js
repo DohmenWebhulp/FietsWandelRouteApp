@@ -19,6 +19,7 @@ class Aanrading extends Component {
             straat: '',
             record: '',
             radius: 0,
+            maxLengte: 11,
             showRoutes: false,
             clRoutes: []
         }
@@ -79,12 +80,31 @@ class Aanrading extends Component {
         )
     }
 
+    fetchData(url){
+        API.fetchGeocode(url)
+        .then( result => {
+            //console.warn(result)
+            this.setState({
+                data: result.data.results[0].geometry.bounds,
+                isSend: true
+            });
+        });
+    }
+
     searchCloseRoutes(){
         //Filter alle fiets/wandelroutes
         var datas = this.state.dataRoutes.filter((item) => item.Record_Type == this.state.record);
 
+        //Krijg met behulp van de Geocode API de coordinaten van de opgegeven plaatsnaam en straatnaam.
+        var url = "https://maps.googleapis.com/maps/api/geocode/json?address=+"+this.state.plaats+",+"+this.state.straat+",+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
+        this.fetchData(url);
+        var coords = Calculations.calculateCoordinates(
+            this.state.data.northeast.lat,this.state.data.southwest.lat,
+            this.state.data.northeast.lng,this.state.data.southwest.lng
+        )
         //Filter de stop eruit met dezelfde plaats- en straatnaam als de opgegeven plaats- en straatnaam.
         //Dit is nu aangevuld met coordinateninfo.
+
         var stop = this.state.dataStops.filter((item) => item.Plaatsnaam == this.state.plaats
                                                     &&    item.Straatnaam == this.state.straat)
 

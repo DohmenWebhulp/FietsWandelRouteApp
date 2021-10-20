@@ -88,6 +88,24 @@ class API {
             reject(error);
         });
     })
+
+    static fetchGeocodeTwice = (url1, url2) => new Promise((resolve, reject) => {
+
+        let datas = {start: {}, eind: {}};
+
+        Promise.all([
+            API.fetchGeocode(url1),
+            API.fetchGeocode(url2)
+        ])
+        .then( result => {
+            datas.start = result[0].data.results[0];
+            datas.eind = result[1].data.results[0];
+            resolve(datas);
+        })
+        .catch( error => {
+            reject(error);
+        });
+    })
  }
  
  export default API;
