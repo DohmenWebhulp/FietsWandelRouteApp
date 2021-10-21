@@ -139,37 +139,37 @@ class RouteToevoegen extends Component {
             return(
                 <View>
                     <Text style={stylist.textstyle2}>Voeg nieuwe Route toe:</Text>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Routenaam</Text>
                         <TextInput style={stylist.textfield} placeholder="Routenaam"
                         onChangeText={(text) => {this.setState({route: text})}}></TextInput>
                     </View>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Omschrijving</Text>
                         <TextInput style={stylist.textfield} placeholder="Omschrijving"
                         onChangeText={(text) => {this.setState({omschrijving: text})}}></TextInput>
                     </View>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Fietsen of Wandelen?</Text>
                         <TextInput style={stylist.textfield} placeholder="F of W?"
                         onChangeText={(text) => {this.setState({record: text})}}></TextInput>
                     </View>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Startplaats</Text>
                         <TextInput style={stylist.textfield} placeholder="Plaatsnaam"
                         onChangeText={(text) => {this.setState({startplaats: text})}}></TextInput>
                     </View>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Startstraat</Text>
                         <TextInput style={stylist.textfield} placeholder="Straatnaam"
                         onChangeText={(text) => {this.setState({startstraat: text})}}></TextInput>
                     </View>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Eindplaats</Text>
                         <TextInput style={stylist.textfield} placeholder="Plaatsnaam"
                         onChangeText={(text) => {this.setState({eindplaats: text})}}></TextInput>
                     </View>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Eindstraat</Text>
                         <TextInput style={stylist.textfield} placeholder="Straatnaam"
                         onChangeText={(text) => {this.setState({eindstraat: text})}}></TextInput>

@@ -95,13 +95,6 @@ class Aanrading extends Component {
         //Filter alle fiets/wandelroutes
         var datas = this.state.dataRoutes.filter((item) => item.Record_Type == this.state.record);
 
-        //Krijg met behulp van de Geocode API de coordinaten van de opgegeven plaatsnaam en straatnaam.
-        var url = "https://maps.googleapis.com/maps/api/geocode/json?address=+"+this.state.plaats+",+"+this.state.straat+",+NL&key=AIzaSyC5LpRoZZqJw7doPNk_2nZRtt1-cDraVfU"
-        this.fetchData(url);
-        var coords = Calculations.calculateCoordinates(
-            this.state.data.northeast.lat,this.state.data.southwest.lat,
-            this.state.data.northeast.lng,this.state.data.southwest.lng
-        )
         //Filter de stop eruit met dezelfde plaats- en straatnaam als de opgegeven plaats- en straatnaam.
         //Dit is nu aangevuld met coordinateninfo.
 
@@ -134,22 +127,22 @@ class Aanrading extends Component {
             return(
                 <View>
                     <Text style={stylist.textstyle2}>Zoek nabijgelegen routes:</Text>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Plaatsnaam</Text>
                         <TextInput style={stylist.textfield} placeholder="Plaatsnaam"
                         onChangeText={(text)=> {this.setState({plaats: text})}}></TextInput>
                     </View>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Straatnaam</Text>
                         <TextInput style={stylist.textfield} placeholder="Straatnaam"
                         onChangeText={(text)=> {this.setState({straat: text})}}></TextInput>
                     </View>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Fietsen of Wandelen?</Text>
                         <TextInput style={stylist.textfield} placeholder="F of W?"
                         onChangeText={(text)=> {this.setState({record: text})}}></TextInput>
                     </View>
-                    <View style={{margin: 10}}>
+                    <View style={stylist.margins}>
                         <Text>Zoekradius</Text>
                         <TextInput style={stylist.textfield} placeholder="Zoekradius"
                         onChangeText={(text) => {this.setState({radius: text})}}></TextInput>

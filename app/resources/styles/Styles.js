@@ -10,6 +10,11 @@ const styling = {
     borderColor: 'black',
     borderRadius: 30
 }
+
+const margins = {
+    margin: 30
+}
+
 const textstyle = {
     fontSize: 23,
     marginRight: 10
@@ -42,4 +47,4 @@ const map = {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
 }
-export {styling, textstyle, buttonstyle, textstyle2, map, textfield};
+export {styling, textstyle, buttonstyle, margins, textstyle2, map, textfield};
