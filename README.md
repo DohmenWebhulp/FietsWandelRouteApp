@@ -20,7 +20,7 @@ Deze mobiele applicatie bestaat uit diverse schermen, te weten:
 * Cockpit CMS
 * Visual Studio Code
 
-De applicatie is met React Native met JavaScript als programmeertaal gerealiseerd. De data wordt gecrëeerd in en opgehaald vanuit de Cockpit CMS door middel van API calls, waar een aparte klasse voor is gemaakt. De 2 verschillende API's van Google Maps worden door middel van een Google API key aangeroepen voor beschikbaarheid om Componenten van die libraries te gebruiken. Deze API's zorgen voor een mooie visualisatie van een specifieke route op de wereldkaart.
+De applicatie is met React Native als framework en met JavaScript als programmeertaal gerealiseerd. De data wordt gecrëeerd in en opgehaald vanuit de Cockpit CMS door middel van API calls, waar een aparte klasse voor is gemaakt. De 2 verschillende API's van Google Maps worden door middel van een Google API key aangeroepen voor beschikbaarheid om Componenten van die libraries te gebruiken. Deze API's zorgen voor een mooie visualisatie van een specifieke route op de wereldkaart.
 
 ## Methoden en Technieken
 
